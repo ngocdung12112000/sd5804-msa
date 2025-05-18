@@ -7,7 +7,7 @@ metadata:
   labels:
     app: backend-app
 spec:
-  replicas: 2 # Start with 2, can be adjusted
+  replicas: 1 # Start with 2, can be adjusted
   selector:
     matchLabels:
       app: backend-app
