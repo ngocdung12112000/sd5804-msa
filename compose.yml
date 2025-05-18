@@ -5,15 +5,15 @@ version: "3.8"
 services:
   # define the frontend service
   # we can use any name for the service. A standard naming convention is to use "web" for the frontend
-  web:
+  frontend:
     # we use depends_on to specify that service depends on another service
     # in this case, we specify that the web depends on the api service
     # this means that the api service will be started before the web service
     depends_on: 
-      - api
+      - backend
     # specify the build context for the web service
     # this is the directory where the Dockerfile for the web service is located
-    build: ./frontend
+    build: ./frontend 
     # specify the ports to expose for the web service
     # the first number is the port on the host machine
     # the second number is the port inside the container
@@ -40,7 +40,7 @@ services:
           action: sync
 
   # define the api service/container
-  api: 
+  backend: 
     # api service depends on the db service so the db service will be started before the api service
     # depends_on: 
     #   - db
