@@ -79,43 +79,43 @@ pipeline {
             }
         }
 
-        // stage('Deploy to EKS') {
-        //     steps {
-        //         script {
-        //             // Ensure Kubernetes secrets (like MongoDB URI) are already in the cluster
-        //             // For production, manage secrets securely (e.g., HashiCorp Vault, AWS Secrets Manager + CSI Driver)
+        stage('Deploy to EKS') {
+            steps {
+                script {
+                    // Ensure Kubernetes secrets (like MongoDB URI) are already in the cluster
+                    // For production, manage secrets securely (e.g., HashiCorp Vault, AWS Secrets Manager + CSI Driver)
 
-        //             if (env.BACKEND_IMAGE_URI) {
-        //                 echo "Deploying Backend: ${env.BACKEND_IMAGE_URI}"
-        //                 // Update the image in the deployment YAML (can also use kustomize or helm)
-        //                 // This is a simple sed replacement. More robust methods exist.
-        //                 sh """
-        //                 sed -i 's|image:.*${env.BACKEND_ECR_REPOSITORY_NAME}:.*|image: ${env.BACKEND_IMAGE_URI}|g' k8s/backend-deployment.yaml
-        //                 cat k8s/backend-deployment.yaml
-        //                 kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/backend-deployment.yaml --namespace=${env.K8S_NAMESPACE}
-        //                 kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/backend-service.yaml --namespace=${env.K8S_NAMESPACE}
-        //                 kubectl --kubeconfig ${env.KUBECONFIG_PATH} rollout status deployment/backend-app-deployment --namespace=${env.K8S_NAMESPACE} --timeout=5m
-        //                 """
-        //             } else {
-        //                 echo "Backend image URI not found. Skipping backend deployment."
-        //             }
+                    if (env.BACKEND_IMAGE_URI) {
+                        echo "Deploying Backend: ${env.BACKEND_IMAGE_URI}"
+                        // Update the image in the deployment YAML (can also use kustomize or helm)
+                        // This is a simple sed replacement. More robust methods exist.
+                        sh """
+                        sed -i 's|image:.*${env.BACKEND_ECR_REPOSITORY_NAME}:.*|image: ${env.BACKEND_IMAGE_URI}|g' k8s/backend-deployment.yaml
+                        cat k8s/backend-deployment.yaml
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/backend-deployment.yaml --namespace=${env.K8S_NAMESPACE}
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/backend-service.yaml --namespace=${env.K8S_NAMESPACE}
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} rollout status deployment/backend-app-deployment --namespace=${env.K8S_NAMESPACE} --timeout=5m
+                        """
+                    } else {
+                        echo "Backend image URI not found. Skipping backend deployment."
+                    }
 
-        //             if (env.FRONTEND_IMAGE_URI) {
-        //                 echo "Deploying Frontend: ${env.FRONTEND_IMAGE_URI}"
-        //                 sh """
-        //                 sed -i 's|image:.*${env.FRONTEND_ECR_REPOSITORY_NAME}:.*|image: ${env.FRONTEND_IMAGE_URI}|g' k8s/frontend-deployment.yaml
-        //                 cat k8s/frontend-deployment.yaml
-        //                 kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/frontend-deployment.yaml --namespace=${env.K8S_NAMESPACE}
-        //                 kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/frontend-service.yaml --namespace=${env.K8S_NAMESPACE}
-        //                 kubectl --kubeconfig ${env.KUBECONFIG_PATH} rollout status deployment/frontend-app-deployment --namespace=${env.K8S_NAMESPACE} --timeout=5m
-        //                 """
-        //             } else {
-        //                 echo "Frontend image URI not found. Skipping frontend deployment."
-        //             }
-        //             echo "Deployment to EKS completed for build ${env.BUILD_TAG}."
-        //         }
-        //     }
-        //}
+                    if (env.FRONTEND_IMAGE_URI) {
+                        echo "Deploying Frontend: ${env.FRONTEND_IMAGE_URI}"
+                        sh """
+                        sed -i 's|image:.*${env.FRONTEND_ECR_REPOSITORY_NAME}:.*|image: ${env.FRONTEND_IMAGE_URI}|g' k8s/frontend-deployment.yaml
+                        cat k8s/frontend-deployment.yaml
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/frontend-deployment.yaml --namespace=${env.K8S_NAMESPACE}
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/frontend-service.yaml --namespace=${env.K8S_NAMESPACE}
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} rollout status deployment/frontend-app-deployment --namespace=${env.K8S_NAMESPACE} --timeout=5m
+                        """
+                    } else {
+                        echo "Frontend image URI not found. Skipping frontend deployment."
+                    }
+                    echo "Deployment to EKS completed for build ${env.BUILD_TAG}."
+                }
+            }
+        }
     }
 
     post {
