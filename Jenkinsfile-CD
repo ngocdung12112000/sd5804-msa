@@ -26,11 +26,10 @@ pipeline {
             }
         }
 
-        stage('Deploy BACK END to EKS') {
+        stage('Deploy to EKS') {
             steps {
                 script {
-                    def fullImageName = "${env.BACKEND_ECR_URL}:latest"
-                    env.BACKEND_IMAGE_URI = fullImageName
+                    env.BACKEND_IMAGE_URI = "${env.BACKEND_ECR_URL}:latest"
                     if (env.BACKEND_IMAGE_URI) {
                         echo "Deploying Backend: ${env.BACKEND_IMAGE_URI}"
                         sh """
@@ -43,15 +42,8 @@ pipeline {
                     } else {
                         echo "Backend image URI not found. Skipping backend deployment."
                     }
-                }
-            }
-        }
 
-        stage('Deploy FRONT END to EKS') {
-            steps {
-                script {
-                    def fullImageName = "${env.FRONTEND_ECR_URL}:latest"
-                    env.FRONTEND_IMAGE_URI = fullImageName
+                    env.FRONTEND_IMAGE_URI = "${env.FRONTEND_ECR_URL}:latest"
                     if (env.FRONTEND_IMAGE_URI) {
                         echo "Deploying Frontend: ${env.FRONTEND_IMAGE_URI}"
                         sh """
@@ -64,7 +56,6 @@ pipeline {
                     } else {
                         echo "Frontend image URI not found. Skipping frontend deployment."
                     }
-                    echo "Deployment to EKS completed for build ${env.BUILD_TAG}."
                 }
             }
         }
