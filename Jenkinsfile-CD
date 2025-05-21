@@ -33,10 +33,10 @@ pipeline {
                     if (env.BACKEND_IMAGE_URI) {
                         echo "Deploying Backend: ${env.BACKEND_IMAGE_URI}"
                         sh """
-                        sed -i 's|image:.*${env.BACKEND_ECR_REPOSITORY_NAME}:.*|image: ${env.BACKEND_IMAGE_URI}|g' k8s/backend-deployment.yaml
-                        cat k8s/backend-deployment.yaml
-                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/backend-deployment.yaml --namespace=${env.K8S_NAMESPACE}
-                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/backend-service.yaml --namespace=${env.K8S_NAMESPACE}
+                        sed -i 's|image:.*${env.BACKEND_ECR_REPOSITORY_NAME}:.*|image: ${env.BACKEND_IMAGE_URI}|g' Manifest/backend-deployment.yaml
+                        cat Manifest/backend-deployment.yaml
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f Manifest/backend-deployment.yaml --namespace=${env.K8S_NAMESPACE}
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f Manifest/backend-service.yaml --namespace=${env.K8S_NAMESPACE}
                         kubectl --kubeconfig ${env.KUBECONFIG_PATH} rollout status deployment/backend-app-deployment --namespace=${env.K8S_NAMESPACE} --timeout=5m
                         """
                     } else {
@@ -47,10 +47,10 @@ pipeline {
                     if (env.FRONTEND_IMAGE_URI) {
                         echo "Deploying Frontend: ${env.FRONTEND_IMAGE_URI}"
                         sh """
-                        sed -i 's|image:.*${env.FRONTEND_ECR_REPOSITORY_NAME}:.*|image: ${env.FRONTEND_IMAGE_URI}|g' k8s/frontend-deployment.yaml
-                        cat k8s/frontend-deployment.yaml
-                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/frontend-deployment.yaml --namespace=${env.K8S_NAMESPACE}
-                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f k8s/frontend-service.yaml --namespace=${env.K8S_NAMESPACE}
+                        sed -i 's|image:.*${env.FRONTEND_ECR_REPOSITORY_NAME}:.*|image: ${env.FRONTEND_IMAGE_URI}|g' Manifest/frontend-deployment.yaml
+                        cat Manifest/frontend-deployment.yaml
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f Manifest/frontend-deployment.yaml --namespace=${env.K8S_NAMESPACE}
+                        kubectl --kubeconfig ${env.KUBECONFIG_PATH} apply -f Manifest/frontend-service.yaml --namespace=${env.K8S_NAMESPACE}
                         kubectl --kubeconfig ${env.KUBECONFIG_PATH} rollout status deployment/frontend-app-deployment --namespace=${env.K8S_NAMESPACE} --timeout=5m
                         """
                     } else {
